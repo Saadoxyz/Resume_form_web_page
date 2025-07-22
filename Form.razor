@@ -1,0 +1,194 @@
+﻿@page "/Form"
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<head>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 500px;
+            max-height: 90vh;
+            overflow-y: auto; /* Allow scrolling inside the form */
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-box {
+            margin-bottom: 18px;
+        }
+
+        .details {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #f0f0f0;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+        }
+
+            input::placeholder, textarea::placeholder {
+                color: #ccc;
+            }
+
+            input:focus, textarea:focus {
+                background: rgba(255, 255, 255, 0.3);
+                box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.4);
+            }
+
+        .button {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+            .button button {
+                width: 100%;
+                background: linear-gradient(to right, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 14px;
+                border-radius: 8px;
+                font-size: 18px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: all 0.3s ease-in-out;
+            }
+
+        input[type="file"] {
+            border: none;
+            background: transparent;
+            padding: 8px;
+            color: #fff;
+        }
+
+    </style>
+</head>
+
+<h3>CV Form</h3>
+
+<div class="container">
+    <div class="title">CV Form</div>
+    <div class="content">
+        <EditForm Model="user" OnValidSubmit="SubmitForm">
+            <DataAnnotationsValidator />
+            <div class="user-details">
+                <div class="input-box">
+                    <span class="details">Full Name</span>
+                    <InputText class="input" @bind-Value="user.FullName" placeholder="Enter your name" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Email</span>
+                    <InputText class="input" @bind-Value="user.Email" placeholder="Enter your email" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Phone Number</span>
+                    <InputText class="input" @bind-Value="user.PhoneNumber" placeholder="Enter your number" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Location</span>
+                    <InputText class="input" @bind-Value="user.Location" placeholder="Enter your location" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">About</span>
+                    <InputTextArea class="input" @bind-Value="user.About" placeholder="Tell about yourself" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Education</span>
+                    <InputText class="input" @bind-Value="user.Education" placeholder="Enter your education details" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Experience</span>
+                    <InputText class="input" @bind-Value="user.Experience" placeholder="Enter your experience" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Skills</span>
+                    <InputText class="input" @bind-Value="user.Skills" placeholder="Enter your skills" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Hobbies</span>
+                    <InputText class="input" @bind-Value="user.Hobbies" placeholder="Enter your hobbies" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Achievements</span>
+                    <InputTextArea class="input" @bind-Value="user.Achievements" placeholder="Enter your achievements" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Certificates</span>
+                    <InputTextArea class="input" @bind-Value="user.Certificates" placeholder="Enter your certificates" required />
+                </div>
+                <div class="input-box">
+                    <span class="details">Upload Photo</span>
+                    <InputFile OnChange="HandleFileUpload" />
+                </div>
+            </div>
+            <div class="button">
+                <button type="submit">Generate CV</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private UserModel user = new();
+
+    private void SubmitForm()
+    {
+        Navigation.NavigateTo($"/cv?name={user.FullName}&email={user.Email}&phone={user.PhoneNumber}&location={user.Location}&about={user.About}&education={user.Education}&experience={user.Experience}&skills={user.Skills}&hobbies={user.Hobbies}&achievements={user.Achievements}&certificates={user.Certificates}");
+    }
+
+    private void HandleFileUpload(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        user.Photo = file.Name;
+    }
+
+    public class UserModel
+    {
+        public string FullName { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string PhoneNumber { get; set; } = "";
+        public string Location { get; set; } = "";
+        public string About { get; set; } = "";
+        public string Education { get; set; } = "";
+        public string Experience { get; set; } = "";
+        public string Skills { get; set; } = "";
+        public string Hobbies { get; set; } = "";
+        public string Achievements { get; set; } = "";
+        public string Certificates { get; set; } = "";
+        public string Photo { get; set; } = "";
+    }
+}
